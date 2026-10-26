@@ -81,7 +81,7 @@ function AccountDataWrap({ children }: { children: React.ReactNode }) {
   const [following, setFollowing] = useState<number>(0);
 
   useEffect(() => {
-    const cell = onAuthStateChanged(auth, (user) => {
+    const cell = onAuthStateChanged(auth, () => {
       setFollows(Math.floor(Math.random() * 1000));
       setFollowing(Math.floor(Math.random() * 1000));
     });
