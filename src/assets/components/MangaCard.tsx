@@ -60,7 +60,7 @@ function MangaCard({
       <div className="Top">
         {image && !imageError ? (
           <img
-            src={image}
+            src={`../../../public/MangaSamples/${image}`}
             alt={title}
             className="cover"
             onError={() => setImageError(true)}
