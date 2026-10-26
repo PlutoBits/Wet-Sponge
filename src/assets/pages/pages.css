@@ -1,0 +1,353 @@
+/* theme */
+:root {
+  --icon: #ffffff;
+  --surface-Dark: #040304;
+  --bg: #080808;
+  --nav-bg: #0808087c;
+  --surface: #0d0d0d;
+  --surface-2: #111111;
+  --LoginPopOver: #040405;
+  --LoginPopOverBorder: #ffffff24;
+  --LoginPopOverLine: #2f2f2f;
+
+  --border: #242424;
+  --border-hover: #303030;
+  --active-broder: #191819;
+  --showdow: #ffffff4d;
+  --card-border: #393939;
+  --button: #6b6b6b;
+  --active-button: #7b7b7b;
+
+  --text: #f5f5f5;
+  --text-secondary-light: #afafaf;
+  --text-secondary: #686868;
+  --text-muted: #b9b8b8;
+  --white: #ffffff;
+  --search-pill: #121212;
+  --selection-color: color-mix(in oklab, #676767 40%, transparent);
+}
+
+::selection {
+  background-color: var(--selection-color);
+  color: var(--text);
+}
+
+/* Animations */
+@keyframes dropIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* base classes */
+body {
+  color: var(--text);
+}
+.intro {
+  color: var(--text);
+  padding: 3.8vw 8vw 0;
+}
+.title,
+.handing,
+.aboutwebsite,
+.title-home {
+  padding-bottom: 12px;
+}
+.handing {
+  font-weight: 900;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 13px;
+}
+.title {
+  font-size: clamp(1rem, 5.5vw, 5rem);
+  font-weight: 700;
+  line-height: clamp(16px, 5vw, 80px);
+}
+.title,
+.aboutwebsite,
+.handing,
+.title-home {
+  animation: dropIn 400ms ease;
+}
+.aboutwebsite {
+  padding-bottom: 20px;
+  font-size: 1.3rem;
+  color: var(--text-muted);
+}
+.button {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 12px;
+  background: #ffffff0d;
+  border: 1px solid #ffffff24;
+  border-radius: 9px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 200ms;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  text-align: center;
+}
+.button:hover {
+  border: 1px solid #ffffff57;
+}
+.button:active {
+  border: 1px solid #ffffff9d;
+  transform: translateY(1px);
+}
+@media screen and (max-width: 550px) {
+  .button {
+    width: auto;
+  }
+  .button-grid {
+    display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: auto repeat(auto, 1fr);
+  }
+}
+
+/* HOME page classes */
+.title-home {
+  font-size: clamp(50px, 150px, 20vw);
+  font-weight: 700;
+  line-height: clamp(2rem, 9vw, 10rem);
+  margin-bottom: clamp(2rem, 5vw, 1rem);
+}
+.hero-page {
+  position: relative;
+  color: var(--text);
+  padding: 13vw 8vw 0;
+  height: 600px;
+  overflow: hidden;
+}
+.hero-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url(../hero-manga.webp);
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(40%);
+
+  z-index: 0;
+}
+.hero-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(to bottom, transparent 60%, var(--bg) 100%),
+    linear-gradient(
+      to right,
+      var(--bg) 0%,
+      transparent 35%,
+      transparent 75%,
+      var(--bg) 100%
+    );
+
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-page > * {
+  position: relative;
+  z-index: 1;
+}
+.button-grid {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* NotFoundPage.tsx */
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -10vh, 0);
+    scale: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+  }
+  100% {
+    transform: translate3d(-10px, 110vh, 0);
+    opacity: 0;
+  }
+}
+.NotFoundShall {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+  flex-direction: column;
+}
+.showFellBackground {
+  position: fixed;
+  height: 600px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: -1;
+}
+.showFellBackground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: transparent;
+  backdrop-filter: blur(6px);
+}
+.ShowBall {
+  background-color: var(--white);
+  border-radius: 50%;
+  animation: fall 6s linear infinite;
+  will-change: transform, opacity;
+  opacity: 0;
+}
+
+/* Manga basic classes */
+.Container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 273px);
+  gap: 20px;
+  row-gap: 20px;
+  margin: 20px 0 50px 0;
+  justify-content: center;
+  padding: 3.8vw 7vw 50px;
+  transition: all 200ms;
+}
+
+/* About.tsx */
+.AboutContainer {
+  display: grid;
+  gap: 20px;
+  row-gap: 20px;
+  margin: 20px 0 50px 0;
+  justify-content: center;
+  transition: all 200ms;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+}
+.AboutFooter {
+  position: relative;
+  margin: 48px 0 0 20px;
+  display: flex;
+}
+.lineBorder {
+  border-top: 1px solid var(--border);
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  right: 20px;
+}
+.AboutButtonGrid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  gap: 10px;
+  position: absolute;
+  left: -20px;
+}
+.AboutButton {
+  padding: 9px 12px;
+  background-color: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  width: max-content;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  transition: all 120ms;
+}
+.AboutButton:active {
+  transform: translateY(1px);
+}
+
+/* Account */
+.SignInButton {
+  justify-content: center;
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--LoginPopOverBorder);
+  border-radius: 6px;
+  color: var(--text);
+  transition: all 200ms;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+.SignInButton i {
+  font-size: 1rem;
+}
+.SignInButton:hover {
+  border: 1px solid #ffffff57;
+}
+.SignInButton:active {
+  border: 1px solid #ffffff9d;
+}
+
+/* Cafe.tsx */
+.TextAreaPostbtn {
+    padding: 10px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 120ms;
+}
+.TextAreaPostbtn:hover {
+    border: 1px solid var(--border-hover)
+}
+.TextArea {
+    background-color: var(--surface);
+    padding: 15px;
+    font-size: 1rem;
+    height: 100px;
+    border: 1px solid var(--border);
+    transition: all 120ms;
+}
+.TextArea:hover {
+    border: 1px solid var(--border-hover);
+}
+.TextArea:active {
+    border: 1px solid var(--active-broder);
+}
+.postArea, .postArea form {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 20px;
+    transition: all 120ms;
+}
+
+@media screen and (max-width: 640px) {
+    .postArea, .postArea form {
+        flex-direction: column;
+    }
+    .TextAreaPostbtn {
+        width: 100%;
+    }
+}
+/* Animation.tsx */
+.AnimationContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 300px);
+  gap: 20px;
+  row-gap: 20px;
+  margin: 20px 0 50px 0;
+  justify-content: center;
+  padding: 3.8vw 7vw 50px;
+  transition: all 200ms;
+}
