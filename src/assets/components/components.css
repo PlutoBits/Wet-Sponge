@@ -1,0 +1,1290 @@
+/* animations */
+@keyframes silder {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* theme */
+:root {
+  --icon: #ffffff;
+  --surface-Dark: #040304;
+  --bg: #080808;
+  --nav-bg: #0808087c;
+  --surface: #0d0d0d;
+  --surface-2: #111111;
+
+  --border: #242424;
+  --border-hover: #303030;
+  --active-border: #191819;
+  --showdow: #ffffff4d;
+  --card-border: #393939;
+  --button: #6b6b6b;
+  --active-button: #7b7b7b;
+  --link: #4890d8;
+  --Dark-Link: #5e5e5e;
+
+  --text: #f5f5f5;
+  --text-secondary: #a5a5a5;
+  --text-muted: #969696;
+  --white: #ffffff;
+  --black: #000000;
+  --search-pill: #121212;
+  --selection-color: color-mix(in oklab, #676767 40%, transparent);
+}
+
+/* NavBar.tsx */
+.NavBar {
+  display: flex;
+  z-index: 1000;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 75px;
+  padding: 12px 5vw;
+  border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+}
+.logo {
+  display: flex;
+  color: var(--text);
+}
+.logo img {
+  width: 50px;
+  height: 50px;
+}
+.logo h1 {
+  padding: 10px 0;
+  font-weight: 900;
+  font-size: 1rem;
+}
+.LogoIcon {
+  width: 44px;
+  height: 44px;
+  filter: grayscale(100%);
+}
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+.Tabs {
+  width: auto;
+  height: 41px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #b5b5b5;
+  font-size: 1rem;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 120ms;
+  user-select: none;
+}
+.Tabs:hover:not(.Active) {
+  border: 1px solid #5e5e5e;
+  color: var(--text);
+}
+.Tabs:active {
+  transform: translateY(1px);
+}
+.Active {
+  border: 1px solid #5e5e5e;
+  color: white;
+}
+.third-child {
+  display: flex;
+  gap: 12px;
+  color: var(--text);
+}
+.first-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchPill {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  height: 42px;
+  padding: 0 12px;
+  overflow: hidden;
+  gap: 15px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--surface);
+  cursor: text;
+}
+.searchPill:hover {
+  border: 1px solid var(--border-hover);
+}
+.searchPill:active {
+  border: 1px solid var(--border);
+}
+.SearchInput-min {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 12px;
+  border: 1px solid #333333;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.searchInput {
+  width: 200px;
+  height: 23px;
+  padding: 0, 2px;
+  border: none;
+  background-color: transparent;
+  color: var(--text);
+  font-size: 16px;
+  font-family: inherit;
+  cursor: inherit;
+}
+.searchModeSearchBar {
+  flex-shrink: 1;
+}
+.NavButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 9px 12px;
+  border: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: transparent;
+  background-color: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 120ms;
+}
+.NavButton:hover {
+  border: 1px solid var(--border-hover);
+}
+.NavButton:active {
+  border: 1px solid var(--active-border);
+  transform: translateY(1px);
+}
+.popelement {
+  display: none;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: inherit;
+  text-align: center;
+}
+.hambar {
+  display: none;
+  font-size: 1rem;
+}
+.fa-bell {
+  color: var(--icon);
+  font-size: 18px;
+}
+.fa-solid,
+.fa-regular,
+.fa-brands {
+  color: var(--icon);
+}
+.ProfileChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 1.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 120ms;
+}
+.ProfileChip:hover {
+  border: 1px solid var(--border-hover);
+}
+.ProfileChip:active {
+  border: 1px solid var(--active-border);
+  transform: translateY(1px);
+}
+.popFirst-Child,
+.popSecond-Child {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px 20px 20px;
+  gap: 10px;
+}
+.IconNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.popTabs {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 0 5px;
+  font-family: inherit;
+}
+#SideBar {
+  width: 230px;
+  height: 100%;
+  border: 1px solid var(--border);
+  background-color: var(--nav-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+#SideBar:popover-open,
+#LoginPopOver:popover-open {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sideBarTop {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+#SideBar {
+  transform: translateX(-100%);
+  opacity: 0;
+  scrollbar-color: #888888 #00000000;
+  scrollbar-width: thin;
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    display 0.2s allow-discrete,
+    overlay 0.2s allow-discrete,
+    scrollbar-color 0.2s allow-discrete;
+}
+#LoginPopOver {
+  opacity: 0;
+  scrollbar-color: #888888 #00000000;
+  scrollbar-width: thin;
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    display 0.2s allow-discrete,
+    overlay 0.2s allow-discrete,
+    scrollbar-color 0.2s allow-discrete;
+}
+#SideBar:popover-open,
+#LoginPopOver:popover-open,
+#AccountSettings:popover-open {
+  transform: translateX(0);
+  opacity: 1;
+}
+#SideBar::backdrop,#LoginPopOver::backdrop, #AccountSettings::backdrop {
+  backdrop-filter: blur(0px);
+  background-color: rgba(0, 0, 0, 0);
+  transition:
+    background-color 0.3s ease-in-out,
+    backdrop-filter 0.3s ease-in-out,
+    display 0.3s allow-discrete,
+    overlay 0.3s allow-discrete;
+}
+#SideBar:popover-open::backdrop, #LoginPopOver:popover-open::backdrop, #AccountSettings:popover-open::backdrop {
+  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.barrier {
+  z-index: 1001;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background-color: transparent;
+}
+@starting-style {
+  #SideBar:popover-open {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  #SideBar:popover-open::backdrop, #LoginPopOver:popover-open::backdrop, #AccountSettings:popover-open::backdrop {
+    backdrop-filter: blur(0);
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+@media screen and (max-width: 1125px) {
+  .tabs {
+    display: none;
+  }
+  .hambar {
+    display: flex;
+  }
+  .SearchInput-min {
+    display: flex;
+  }
+  .searchPill {
+    display: none;
+  }
+  .notification {
+    display: none;
+  }
+  .popelement {
+    display: flex;
+  }
+  .searchModeSearchBar {
+    display: flex;
+  }
+  .LogoIcon {
+    display: none;
+  }
+}
+
+/* MangaCard.tsx */
+.MangaCard {
+  width: 260px;
+  height: auto;
+  overflow: hidden;
+  transform: translateY(0);
+  border: 1px solid #393939;
+  border-radius: 6px;
+  background-color: var(--surface);
+  box-shadow: 0 0 0 #ffffff00;
+  transition:
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+.MangaCard:hover {
+  transform: translateY(-8px);
+  border: 1px solid var(--icon);
+  box-shadow: 0 0 25px #ffffff4d;
+}
+
+.NoAble {
+  width: 32px;
+  height: 27px;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--button);
+  cursor: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.NoAble:hover {
+  background-color: var(--button);
+}
+
+.buttonOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 27px;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--button);
+  cursor: pointer;
+}
+.buttonOption:hover {
+  background-color: var(--active-button);
+}
+
+.cover {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  border-bottom: 1px solid #393939;
+  border-radius: 5px;
+}
+.imageError {
+  border-radius: 6px;
+  background-color: var(--surface);
+}
+.MangaTitle {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.releasedate {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+.bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100px;
+  padding: 3px 10px 10px;
+}
+.option {
+  display: flex;
+  justify-content: space-between;
+}
+.firstOptions {
+  display: flex;
+  gap: 10px;
+}
+.firstOptions span {
+  display: flex;
+  gap: 5px;
+}
+
+/* ForFoundItem */
+.Face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.eyeRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+.eye {
+  transform: rotate(90deg);
+}
+.Mouth {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  transform: rotate(90deg);
+  font-weight: 500;
+  text-align: center;
+}
+.text {
+  margin-top: 10px;
+}
+
+/* Article.tsx and AccountDataCard.tsx and ProfileCard.tsx */
+.Article,
+.AccountDataCard,
+.ProfileCard {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--surface);
+  transition: all 200ms;
+}
+.Article:hover,
+.AccountDataCard:hover,
+.ProfileCard:hover {
+  transform: translateY(-8px);
+  border: 1px solid var(--icon);
+  box-shadow: 0 0 25px #ffffff4d;
+}
+.ArticleTitle,
+.AccountDataCardTitle {
+  margin-bottom: 18px;
+  font-weight: 900;
+  font-size: 18px;
+}
+.AccountDataCardTitle {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.ArticleDescription,
+.AccountDataCardParagraph {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+.AccountDataCardParagraph {
+  margin: 0 0 18px 0;
+  font-size: 1rem;
+}
+.TypeLink {
+  transition: all 120ms;
+}
+.TypeLink:hover {
+  color: var(--Dark-Link)
+}
+
+/* ProfileCard */
+.Iconback {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+.ProfileCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px 20px;
+}
+.Icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  height: 86px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background-color: var(--surface-2);
+  font-size: 4rem;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-weight: 600;
+  font-size: clamp(1rem, 5vw, 2rem);
+}
+
+.ProfileCardRightBottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.Follows {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.Following {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* AnimationCard.tsx */
+.AnimationCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  overflow: hidden;
+  transform: translateY(0);
+  border: 1px solid #393939;
+  border-radius: 6px;
+  background-color: var(--surface);
+  box-shadow: 0 0 0 #ffffff00;
+  transition:
+    box-shadow 300ms ease,
+    transform 300ms ease;
+  width: 290px;
+}
+.AnimationCard:hover {
+  transform: translateY(-8px);
+  border: 1px solid var(--icon);
+  box-shadow: 0 0 25px #ffffff4d;
+}
+.AnimationCardbottom {
+  display: flex;
+  justify-content: space-between;
+  height: auto;
+  width: 100%;
+  flex-direction: column;
+}
+.AnimationCardTop {
+  width: 100%;
+  height: 150px;
+}
+.timeStamp {
+  width: max-content;
+  padding: 2px 3px;
+  border-radius: 3px;
+  background: var(--nav-bg);
+  user-select: none;
+  font-size: small;
+}
+.AnimationCardImage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  height: 150px;
+  padding: 5px;
+  border-radius: 6px;
+  background-position: center;
+}
+.AnimationCardtitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+}
+.AnimationCardDetails {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+.AnimationCardDetails1 {
+  justify-content: space-between;
+  width: 100%;
+}
+.AnimationCardDetails span {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: space-between;
+}
+.AnimationCardDetails span > div {
+  display: flex;
+  align-items: center;
+}
+.AnimationCardDetails1main {
+  display: flex;
+  column-gap: 2px;
+  align-items: center;
+  justify-content: center;
+}
+.AnimationMenu {
+  position: fixed;
+  position-area: bottom right;
+  margin: 8px 0 0 0;
+  width: 230px;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  opacity: 0;
+  transition:
+    opacity 120ms ease,
+    display 120ms allow-discrete,
+    overlay 120ms allow-discrete;
+}
+.AnimationMenu:popover-open {
+  opacity: 1;
+}
+.AnimationMenu ul {
+  display: flex;
+  flex-direction: column;
+  color: var(--white);
+  gap: 5px;
+}
+.AnimationMenu ul > button {
+  height: 40px;
+  width: 100%;
+  padding: 5px 10px;
+  align-items: center;
+  justify-content: start;
+  display: flex;
+  gap: 10px
+}
+.AnimationMenu ul > button:hover {
+  background-color: hsl(from var(--surface-2) h s 10%);
+}
+.AnimationMenuButton {
+  width: 25px;
+  height: 25px;
+  background-color: inherit;
+  transition: all 250ms ease;
+  border-radius: 50%;
+}
+.AnimationMenuButton:active, .AnimationMenuButton:hover {
+  background-color: hsl(from var(--surface) h s 10%);
+}
+
+/* MusicCard.tsx */
+.MusicCard {
+  display: flex;
+  flex-direction: column;
+  height: 440px;
+  padding: 14px;
+  padding: 0 0 10px;
+  overflow: hidden;
+  transform: translateY(0);
+  border: 1px solid #393939;
+  border-radius: 6px;
+  background-color: var(--surface);
+  box-shadow: 0 0 0 #ffffff00;
+  transition:
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.MusicCard:hover {
+  transform: translateY(-8px);
+  border: 1px solid var(--icon);
+  box-shadow: 0 0 25px #ffffff4d;
+}
+.MusicCardtitle {
+  display: -webkit-box;
+  font-weight: 600;
+  font-size: 1.1rem;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+  padding: 5px 10px;
+}
+
+/* LogPopover.tsx */
+#LoginPopOver {
+  z-index: 999999 !important;
+  width: 750px;
+  height: max-content;
+  margin: auto;
+  border: 1px solid var(--LoginPopOverLine);
+  border-radius: 15px;
+  background-color: var(--LoginPopOver);
+  color: #fff;
+  font-family: "Alexandria";
+  transition: all 200ms;
+}
+.LoginPopOverContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: 500px;
+  max-height: 550px;
+}
+.randomCharShowCase {
+  z-index: -1;
+  position: absolute;
+  width: 53.42%;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--LoginPopOverLine);
+  background-position: center;
+  background-size: cover;
+  filter: grayscale(100%) contrast(1.05) brightness(0.85);
+}
+.randomCharShowCase::before {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background: linear-gradient(to bottom, #00000000, #0c0c0ce3);
+  content: "";
+}
+.randomCharShowCaseContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 390px;
+  height: 100%;
+  padding: 20px;
+  background-color: inherit;
+  user-select: none;
+}
+.TextWelcome,
+.TextSingIn,
+.TextFounder {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 30px;
+}
+.TextDive {
+  font-size: 2rem;
+  line-height: 2.2rem;
+}
+.showcaseImageLine {
+  width: 60px;
+  height: 2px;
+  margin: 10px 0;
+  border-radius: 2px;
+  background-color: var(--text);
+}
+.TextSingIn {
+  width: 225px;
+  line-height: 1rem;
+  text-wrap: 1rem;
+}
+.TextFounder {
+  display: flex;
+  align-items: center;
+  margin-top: 25px;
+  gap: 5px;
+  color: var(--text-secondary);
+}
+.TextFounder svg {
+  color: var(--text-secondary-light);
+  font-size: 0.6rem;
+}
+.leftIcon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 1rem;
+}
+.leftIcon img {
+  width: 35px;
+  height: 35px;
+}
+.charm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.charmLine {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to left, #141414, #18191850);
+}
+.charmIcon svg {
+  margin-bottom: 2px;
+  font-size: 10px;
+  text-align: center;
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 46.58%;
+  padding: 25px 20px 30px;
+  overflow-y: auto;
+  gap: 20px;
+}
+.LoginPopOverTitle h1 {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.LoginPopOverTitle p {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.LoginForm p {
+  font-weight: 300;
+  font-size: 0.875rem;
+}
+.LoginForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 10px;
+}
+.InputPill {
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  border: 1.5px solid var(--LoginPopOverBorder);
+  border-radius: 5px;
+  background-color: transparent !important;
+  transition: all 200ms ease;
+}
+.InputPill:hover {
+  border: 1px solid #ffffff57;
+}
+.InputPill:active {
+  border: 1px solid #ffffff9d;
+}
+.InputPill input {
+  width: 100%;
+  padding: 0 30px;
+  border: none;
+  border: none !important;
+  outline: none;
+  background-color: inherit;
+  color: var(--text);
+}
+.InputPill svg {
+  color: var(--LoginPopOverLine);
+  font-size: 1.5rem;
+}
+.leftElementInputPill {
+  position: absolute;
+  left: 8px;
+}
+.rightElementInputPill {
+  position: absolute;
+  right: 8px;
+}
+.orBorder,
+.Border {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  margin: clamp(10px, 4vh, 10px) 0;
+  background-color: var(--LoginPopOverBorder);
+}
+.Border {
+  margin: 5px 0;
+}
+.Agree {
+  display: flex;
+  gap: 5px;
+}
+.Agree label {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  font-weight: 400;
+}
+.Agree a, .LoginPopOverfooter a {
+    transition: all 120ms;
+    text-decoration: underline;
+}
+.Agree a:hover, .LoginPopOverfooter a:hover {
+    color: var(--link);
+    text-decoration: none;
+}
+.orBorder:after {
+  position: absolute;
+  top: -10px;
+  left: 42%;
+  padding: 2px 15px;
+  border-radius: 3px;
+  background-color: var(--LoginPopOver);
+  content: "OR";
+  color: var(--border);
+  font-size: 0.8rem;
+}
+.LoginPopOverfooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.LoginPopOverfooter label {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.ErrorField {
+  width: 300px;
+  font-weight: 200;
+}
+.LoginPopOverfooter a {
+  display: flex;
+  align-items: center;
+  font-weight: 300;
+  font-size: 0.8rem;
+}
+
+.verifyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 30px;
+}
+.verifyContainerInner {
+  padding: 20px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+.verifyContainerInner span > span, .verifyContainerInner span, .verifyContainerInner p{
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 10px;
+}
+.verifyContainerInner span h1 {
+  color: var(--text);
+  line-height: 20px;
+  margin: 10px 0 5px;
+  font-size: 1.5rem;
+}
+.ResetInputPill {
+  display: flex !important;
+  max-width: 100%;
+  flex: 1;
+}
+.verifyContainerInner > span > span {
+  padding: 0 10px 10px 10px;
+}
+.verifyContainerInner span > form > p {
+  text-align: center;
+  max-width: 100%
+}
+.verifyContainerInner span {
+  padding-top: 0 !important;
+}
+.verifyContainerInner p {
+  font-size: 0.8rem;
+  white-space: normal;
+  text-align: center;
+  padding-top: 0;
+}
+.ButtonsGridResetPop {
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 480px) {
+  .verifyContainerInner p, .verifyContainerInner span > form > span > p {
+    max-width: 250px;
+    display: block;
+    line-height: 1.4;
+  }
+}
+.resendBtn {
+  padding: 5px;
+  background-color: var(--white);
+  color: var(--black);
+}
+.email {
+  text-decoration: underline;
+}
+.resendBtnBack {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 36px !important;
+  margin: 0 !important;
+}
+.verify-icon {
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--white);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.verify-icon svg {
+  color: var(--black);
+  width: 3rem;
+  height: 3rem;
+}
+.forgotPassLink {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--text-muted);
+  transition: text-decoration-color 300ms ease;
+  cursor: pointer;
+}
+.forgotPassLink:hover {
+  text-decoration-color: transparent;
+}
+.sendBtn {
+  width: 100%;
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 800px), (max-Height: 507px) {
+  .left {
+    display: none;
+  }
+  #LoginPopOver {
+    width: max-content;
+    height: min-content;
+  }
+  .LoginPopOverContainer {
+    min-height: 400px;
+  }
+  .LoginPopOverTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .right {
+    width: 100%;
+  }
+}
+/* AccountSettings */
+#AccountSettings {
+  opacity: 0;
+  scrollbar-color: #888888 #00000000;
+  scrollbar-width: thin;
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    display 0.2s allow-discrete,
+    overlay 0.2s allow-discrete,
+    scrollbar-color 0.2s allow-discrete;
+  border-radius: 15px;
+  margin: auto;
+  border: 1px solid var(--LoginPopOverLine);
+  background-color: var(--LoginPopOver);
+  color: #fff;
+  font-family: "Alexandria";
+}
+.AccountSettingsContainer {
+  display: flex;
+  flex-direction: row;
+  z-index: 999999 !important;
+  width: 850px;
+  height: 500px;
+}
+.AccountSettingsContainerLeft {
+  width: 220px;
+  height: 100%;
+  border-right: 1px solid var(--LoginPopOverLine);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.AccountSettingsContainerLeft > span {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-top: 5px;
+}
+.AccountSettingsContainerRight {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+}
+.AccountSettingsProfileCard {
+  width: cal(100% - 5px);
+  height: max-content;
+  padding: 5px;
+  margin: 5px 5px 5px;
+  border-radius: 10px;
+  display: flex;
+  transition: all 120ms ease;
+}
+.AccountSettingsProfileCardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 4rem;
+}
+.AccountSettingsProfileCardInfo {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  flex-direction: column;
+  padding: 5px;
+}
+.AccountSettingsProfileCardInfo > .z {
+  width: max-content;
+  font-size: 1.3rem;
+}
+.AccountSettingsProfileCardInfoFollow {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  width: max-content;
+}
+.Line {
+  width: cal(100% - 10px);
+  height: 1px;
+  background-color: var(--LoginPopOverLine);
+  margin: 0 10px;
+}
+.AccountSettingsBox {
+  width: cal(100% - 5px);
+  height: 50px;
+  padding: 5px 0 5px 10px;
+  margin: 5px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  transition: all 120ms ease;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  flex-direction: row;
+}
+.AccountSettingsActiveIndicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: hsl(from var(--surface) h s 10%);
+  border-radius: 12px;
+  transition: top 0.3s ease;
+  z-index: 0;
+}
+.AccountSettingsBox svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: 0.5rem;
+}
+.SettingsRightInfo {
+  width: 100%;
+  height: max-content;
+}
+.SettingsRightInfo h1{
+  font-size: larger
+}
+.SettingsRightInfo p{
+  font-size: small;
+  color: var(--text-muted)
+}
+.Linee {
+  margin: 0;
+}
+.big {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  overflow: visible;
+  margin: none;
+  padding: none;
+}
+.bigg > .AccountSettingsProfileCard {
+  margin: 5px 5px 5px 0;
+  padding: 0;
+}
+.PenButton svg {
+  width: 1rem;
+  height: 1rem;
+}
+.PenButton {
+  position: absolute;
+  border: 1px solid var(--border);
+  background: var(--border);
+  width: 1.8rem;
+  height: 1.8rem;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 120ms ease;
+}
+.PenButton:active {
+  transform: translateY(1px);
+}
+.PenButtonBio {
+  margin-left: 3px;
+}
+.cc input {
+  width: min-content;
+  color: var(--text-muted);
+  outline: none;
+}
+@media screen and (max-width: 850px) {
+  .AccountSettingsContainer {
+    width: clamp(320px, 92vw, 450px);
+  }
+  .AccountSettingsContainerLeft {
+    display: none;
+  }
+}
