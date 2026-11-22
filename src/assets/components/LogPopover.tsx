@@ -48,7 +48,7 @@ type PopoverProps = {
 function Popover({ open, onClose }: PopoverProps) {
   //* conditions *//
   const [ShowPasswordIcon, SetShowPasswordIcon] = useState(false);
-  const [signedUpEmail] = useState("");
+  const [signedUpEmail, setSignedUpEmail] = useState("");
   const [option, setOption] = useState("login");
   const [CreateAccError, setCreateAccError] = useState("");
   const [LoginError, setLoginError] = useState("");
@@ -171,8 +171,8 @@ function Popover({ open, onClose }: PopoverProps) {
         }
         email = found;
       }
-      CloseMenu();
       await classicLogin({ password: data.password, email: email });
+      CloseMenu();
     } catch (error) {
       setLoginError(getPlainError(error));
     }
@@ -188,6 +188,7 @@ function Popover({ open, onClose }: PopoverProps) {
           email: data.email,
           username: data.username,
         });
+        setSignedUpEmail(data.email);
         setOption("verify");
         try {
           sendVerification();
@@ -205,9 +206,6 @@ function Popover({ open, onClose }: PopoverProps) {
   };
   useEffect(() => {
     if (option !== "verify") return;
-
-    sendVerification(); // sends the email when the screen opens
-
     const timer = setInterval(async () => {
       await auth.currentUser?.reload();
       if (auth.currentUser?.emailVerified) {
@@ -232,7 +230,7 @@ function Popover({ open, onClose }: PopoverProps) {
   };
   const SignInWithGoogle = async () => {
     const ok = await LoginWithGoogle();
-    if (ok == "true") {
+    if (ok !== "true") {
       setLoginError(ok);
     } else {
       CloseMenu();
