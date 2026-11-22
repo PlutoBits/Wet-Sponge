@@ -171,7 +171,6 @@ export const ButtonData = [
 
 import { GoVideo } from "react-icons/go";
 import { LuMusic4 } from "react-icons/lu";
-import { Profile } from "../components/AccountContext";
 import { MdBookmarkBorder } from "react-icons/md";
 export const options = [
   {

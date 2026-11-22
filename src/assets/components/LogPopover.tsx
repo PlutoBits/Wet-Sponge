@@ -50,6 +50,7 @@ import { IoIosArrowBack } from "react-icons/io";
 //* Props *//
 type PopoverProps = {
   open: boolean;
+  backdropRef: React.RefObject<HTMLDivElement | null>;
 };
 
 async function getEmailFromUsername({ username }: { username: string }) {
@@ -70,7 +71,7 @@ const sendVerification = async () => {
   }
 };
 
-function Popover({ open }: PopoverProps) {
+function Popover({ open, backdropRef }: PopoverProps) {
   //* conditions *//
   const [ShowPasswordIcon, SetShowPasswordIcon] = useState(false);
   const [signedUpEmail, setSignedUpEmail] = useState("");
@@ -87,6 +88,7 @@ function Popover({ open }: PopoverProps) {
   //* Popover logic *//
   const closeMenu = () => {
     menuRef.current?.hidePopover();
+    backdropRef.current?.classList.remove("barrier");
   };
   const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {

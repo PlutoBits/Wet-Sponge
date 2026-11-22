@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { AccountCardDate } from "../types/Types";
 import Popover from "../components/LogPopover";
 import { Button } from "../../../@/components/ui/button";
@@ -15,6 +15,7 @@ function Account() {
   const [SettingPopoverOpener, SetSettingPopoverOpener] = useState(false);
   const { UserData } = useUser();
   const [IsUserLogged, SetUserLogged] = useState(false);
+  const BackDropRef = useRef(null);
 
   useEffect(() => {
     const cell = onAuthStateChanged(auth, (user) => {
@@ -80,11 +81,12 @@ function Account() {
       {PopoverOpener && (
         <div className="barrier" onClick={() => SetPopoverOpener(false)} />
       )}
-      <Popover open={PopoverOpener}></Popover>
+      <Popover open={PopoverOpener} backdropRef={BackDropRef}></Popover>
       {SettingPopoverOpener && (
         <div
           className="barrier"
           onClick={() => SetSettingPopoverOpener(false)}
+          ref={BackDropRef}
         />
       )}
       <AccountSettings open={SettingPopoverOpener} />

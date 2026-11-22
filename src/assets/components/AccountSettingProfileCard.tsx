@@ -14,8 +14,7 @@ function ProfileCard({
   pen?: boolean;
   AccountData: { username: string; display: string; Bio: string };
 }) {
-  const { UserData } = useUser();
-  const { SetUserData } = useUser();
+  const { UserData, SetUserData } = useUser();
   const [inEdit, SetEdit] = useState(false);
   const [Bio, setBio] = useState(AccountData.Bio);
   return (
@@ -44,6 +43,7 @@ function ProfileCard({
                   onClick={async (e) => {
                     e.preventDefault();
                     await UpdateBio(Bio);
+                    SetUserData((prev) => ({ ...prev, Bio }));
                     SetEdit(false);
                   }}
                   type="submit"
