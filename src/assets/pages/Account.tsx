@@ -5,7 +5,7 @@ import { Button } from "../../../@/components/ui/button";
 import AccountDataCard from "../components/AccountDataCard";
 import AccountSettings from "../../assets/components/AccountSettings";
 import ProfileCard from "../components/ProfileCard";
-import { useUsername } from "../components/AccountContext";
+import { useUser } from "../components/AccountContext";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../Config/FirebaseConfig";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -13,7 +13,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 function Account() {
   const [PopoverOpener, SetPopoverOpener] = useState(false);
   const [SettingPopoverOpener, SetSettingPopoverOpener] = useState(false);
-  const { username } = useUsername();
+  const { UserData } = useUser();
   const [IsUserLogged, SetUserLogged] = useState(false);
 
   useEffect(() => {
@@ -34,10 +34,10 @@ function Account() {
       <div className="intro" style={{ paddingBottom: `25px` }}>
         <div className="handing">ACCOUNT</div>
         <div className="title" style={{ padding: `0px 0px 12px 0px` }}>
-          {username}
+          {UserData.displayName}
         </div>
         <div className="aboutwebsite" style={{ padding: `0px 0px 20px 0px` }}>
-          {"Somthing"}
+          {UserData.Bio}
         </div>
         <div
           className="AboutContainer"

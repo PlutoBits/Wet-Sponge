@@ -1,6 +1,15 @@
-import { getDocs, collection, Timestamp } from "firebase/firestore";
-import { db } from "./FirebaseConfig";
+import {
+  getDocs,
+  getDoc,
+  collection,
+  Timestamp,
+  doc,
+  setDoc,
+} from "firebase/firestore";
+import { auth, db } from "./FirebaseConfig";
 import { useQuery } from "@tanstack/react-query";
+import type { UserData } from "../assets/types/Types";
+import { updateEmail } from "firebase/auth";
 
 export type MangaItems = {
   id: string;
@@ -75,3 +84,57 @@ export function useAnimation() {
     queryFn: fetchAnimation,
   });
 }
+export async function fetchUserData(
+  uid: string,
+): Promise<Omit<UserData, "Profile">> {
+  const snap = await getDoc(doc(db, "publicUserInfo", uid));
+  const data = snap.data();
+  return {
+    createdAt: data?.createdAt ?? Timestamp.now(),
+    username: data?.username || "",
+    displayName: data?.displayName || "",
+    email: data?.email ?? "",
+    Bio: data?.Bio ?? "",
+    Followers: data?.Followers ?? 0,
+    Followings: data?.Followings ?? 0,
+  };
+}
+export async function UpdateBio(newBio: string) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await setDoc(
+    doc(db, "publicUserInfo", user.uid),
+    { Bio: newBio },
+    { merge: true },
+  );
+}
+export const UpdateUsername = (username: string, uid: string) => {
+  return Promise.all([
+    setDoc(
+      doc(db, "publicUserInfo", uid),
+      { username: username },
+      { merge: true },
+    ),
+    setDoc(doc(db, "User", uid), { username: username }, { merge: true }),
+  ]);
+};
+export const UpdateDisplayName = (displayName: string, uid: string) => {
+  return Promise.all([
+    setDoc(
+      doc(db, "publicUserInfo", uid),
+      { displayName: displayName },
+      { merge: true },
+    ),
+    setDoc(doc(db, "User", uid), { displayName: displayName }, { merge: true }),
+  ]);
+};
+export const UpdateEmail = async (email: string, uid: string) => {
+  const user = auth.currentUser;
+  if (!user) return;
+  (await updateEmail(user, email),
+    await Promise.all([
+      setDoc(doc(db, "publicUserInfo", uid), { email: email }, { merge: true }),
+      setDoc(doc(db, "User", uid), { email: email }, { merge: true }),
+    ]));
+};

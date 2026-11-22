@@ -1,24 +1,24 @@
-import { useProfile, useUsername, useAccountData } from "./AccountContext";
+import { useUser } from "./AccountContext";
 
 function ProfileCard() {
-  const { profileIcon } = useProfile();
-  const { username } = useUsername();
-  const { follows, following } = useAccountData();
+  const { UserData } = useUser();
 
   return (
     <div className="ProfileCard">
       <div className="ProfileCardRight">
         <div className="Iconback">
-          <div className="Icon">{profileIcon}</div>
+          <div className="Icon">
+            <UserData.Profile />
+          </div>
         </div>
       </div>
       <div className="ProfileCardRight">
         <div className="ProfileCardRightTop">
-          <div className="username">{username}</div>
+          <div className="username">{UserData.displayName}</div>
         </div>
         <div className="ProfileCardRightBottom">
-          <p className="Following">Following {following}</p>
-          <p className="Follows">Follows {follows}</p>
+          <p className="Following">Following {UserData.Followings}</p>
+          <p className="Follows">Follows {UserData.Followers}</p>
         </div>
       </div>
     </div>

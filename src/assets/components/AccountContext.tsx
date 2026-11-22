@@ -1,25 +1,60 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { type ReactNode } from "react";
 import type { UserData } from "../types/Types";
-import { auth, db } from "../../Config/FirebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { DefaultUserRef } from "../types/Types";
+import { auth } from "../../Config/FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { FaShieldDog } from "react-icons/fa6";
 import { FaShieldCat } from "react-icons/fa6";
+import { Timestamp } from "firebase/firestore/lite";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../Config/FirebaseConfig";
+
+const Pet = Math.random() < 0.5 ? "Dowg" : "Cat";
+export const Profile = Pet === "Dowg" ? FaShieldDog : FaShieldCat;
 
 const UserContext = createContext<{
   UserData: UserData;
   SetUserData: React.Dispatch<React.SetStateAction<UserData>>;
 } | null>(null);
 
-export async function UserProvider({ children }: { children: ReactNode }) {
-  const [UserData, SetUserData] = useState({
-    username: "",
-    DisplayName: "",
-    Bio: "",
-    Followers: 0,
-    Followings: 0,
-  });
+export function UserProvider({ children }: { children: ReactNode }) {
+  const [UserData, SetUserData] = useState<UserData>(DefaultUserRef);
+  useEffect(() => {
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        SetUserData({
+          createdAt: Timestamp.now(),
+          username: Pet.toLowerCase(),
+          displayName: Pet,
+          email: "",
+          Bio: Pet === "Dowg" ? "A Dowg" : "A Cat",
+          Profile: Profile,
+          Followers: 0,
+          Followings: 0,
+        });
+        return;
+      }
+      const unsubSnap = onSnapshot(
+        doc(db, "publicUserInfo", user.uid),
+        (snap) => {
+          const data = snap.data();
+          SetUserData({
+            createdAt: data?.createdAt ?? Timestamp.now(),
+            username: data?.username || Pet,
+            displayName: data?.displayName || Pet,
+            email: data?.email ?? "",
+            Bio: data?.Bio || (Pet === "Dowg" ? "A Dowg" : "A Cat"),
+            Profile: Profile,
+            Followers: data?.Followers ?? 0,
+            Followings: data?.Followings ?? 0,
+          });
+        },
+      );
+      return () => unsubSnap();
+    });
+    return () => unsubAuth();
+  }, []);
 
   return (
     <UserContext.Provider value={{ UserData, SetUserData }}>
@@ -29,5 +64,7 @@ export async function UserProvider({ children }: { children: ReactNode }) {
 }
 
 export function useUser() {
-  useContext(UserContext);
+  const ctx = useContext(UserContext);
+  if (!ctx) throw new Error("useUser must be used inside UserProvider");
+  return ctx;
 }

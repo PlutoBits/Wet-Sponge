@@ -9,36 +9,28 @@ import NotFoundPage from "./assets/pages/NotFoundPage";
 import "./assets/pages/pages.css";
 import "./assets/components/components.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  ProfileWarp,
-  UsernameWarp,
-  AccountDataWrap,
-} from "./assets/components/AccountContext";
+import { UserProvider } from "./assets/components/AccountContext";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <ProfileWarp>
-        <UsernameWarp>
-          <AccountDataWrap>
-            <QueryClientProvider client={queryClient}>
-              <ToastContainer theme="dark" position="bottom-right" />
-              <BrowserRouter>
-                <NavBar />
-                <Routes>
-                  {PagesContent.map((Content) => (
-                    <Route path={Content.name} element={Content.element} />
-                  ))}
-                  <Route path="/" element={<Navigate to="/Home" replace />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </BrowserRouter>
-            </QueryClientProvider>
-          </AccountDataWrap>
-        </UsernameWarp>
-      </ProfileWarp>
+      <UserProvider>
+        <QueryClientProvider client={queryClient}>
+          <ToastContainer theme="dark" position="bottom-right" />
+          <BrowserRouter>
+            <NavBar />
+            <Routes>
+              {PagesContent.map((Content) => (
+                <Route path={Content.name} element={Content.element} />
+              ))}
+              <Route path="/" element={<Navigate to="/Home" replace />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </UserProvider>
     </>
   );
 }

@@ -8,15 +8,30 @@ import {
   Account,
   Terms,
 } from "../pages/path";
+import { Timestamp } from "firebase/firestore/lite";
 
+import type { IconType } from "react-icons";
 export type UserData = {
   username: string;
-  DisplayName: string;
+  displayName: string;
   Bio: string;
+  email: string;
+  createdAt: Timestamp;
   Followers: number;
   Followings: number;
+  Profile: IconType;
 };
-
+import { FaShieldDog } from "react-icons/fa6";
+export const DefaultUserRef: UserData = {
+  createdAt: Timestamp.now(),
+  displayName: "",
+  Bio: "",
+  email: "",
+  username: "",
+  Profile: FaShieldDog,
+  Followers: 0,
+  Followings: 0,
+};
 export const PagesContent = [
   {
     name: "/Home",
@@ -156,6 +171,7 @@ export const ButtonData = [
 
 import { GoVideo } from "react-icons/go";
 import { LuMusic4 } from "react-icons/lu";
+import { Profile } from "../components/AccountContext";
 import { MdBookmarkBorder } from "react-icons/md";
 export const options = [
   {

@@ -2,12 +2,12 @@ import { NavLink } from "react-router-dom";
 import { useState, useRef, type ToggleEvent } from "react";
 import WetSponge from "../Wetsponge.webp";
 import { Link } from "react-router-dom";
-import { useProfile } from "../components/AccountContext";
+import { useUser } from "../components/AccountContext";
 
 function NavBar() {
   const [mode, setMode] = useState("all");
   const [searchInput, setSearch] = useState("");
-  const { profileIcon } = useProfile();
+  const { UserData } = useUser();
 
   const handleSubmit = () => {
     window.location.reload();
@@ -83,7 +83,7 @@ function NavBar() {
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
             <NavLink className="ProfileChip" to={"/Account"}>
-              {profileIcon}
+              <UserData.Profile />
             </NavLink>
           </div>
         </div>
