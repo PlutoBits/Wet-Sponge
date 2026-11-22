@@ -14,25 +14,6 @@ import {
   InputGroupInput,
 } from "../../../@/components/ui/input-group";
 import { Checkbox } from "../../../@/components/ui/checkbox";
-import { auth } from "../../Config/FirebaseConfig";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import {
-  doc,
-  setDoc,
-  getDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
-import { db } from "../../Config/FirebaseConfig";
 
 //* Image Imports *//̥
 import { Link } from "react-router-dom";
@@ -46,50 +27,40 @@ import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlinePassword } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
+import {
+  isUsernameTaken,
+  classicLogin,
+  getEmailFromUsername,
+  getPlainError,
+  classicSignUp,
+  sendVerification,
+  LoginWithGoogle,
+} from "../../Config/Functions";
+import { auth } from "../../Config/FirebaseConfig";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 //* Props *//
 type PopoverProps = {
   open: boolean;
-  backdropRef: React.RefObject<HTMLDivElement | null>;
+  onClose: () => void;
 };
 
-async function getEmailFromUsername({ username }: { username: string }) {
-  const q = query(
-    collection(db, "publicUserInfo"),
-    where("username", "==", username),
-  );
-  const snap = await getDocs(q);
-  if (snap.empty) {
-    return null;
-  }
-  const email = snap.docs[0].data().email;
-  return email;
-}
-const sendVerification = async () => {
-  if (auth.currentUser) {
-    await sendEmailVerification(auth.currentUser);
-  }
-};
-
-function Popover({ open, backdropRef }: PopoverProps) {
+function Popover({ open, onClose }: PopoverProps) {
   //* conditions *//
   const [ShowPasswordIcon, SetShowPasswordIcon] = useState(false);
-  const [signedUpEmail, setSignedUpEmail] = useState("");
+  const [signedUpEmail] = useState("");
   const [option, setOption] = useState("login");
-  const [CreateAccError, SetCreateAccError] = useState("");
-  const [LoginError, SetLoginError] = useState("");
+  const [CreateAccError, setCreateAccError] = useState("");
+  const [LoginError, setLoginError] = useState("");
   const [resetEmail, setResetEmail] = useState("");
-  const [resetError, SetResetError] = useState("");
-  const [isSent, SetSent] = useState(false);
+  const [resetError, setResetError] = useState("");
+  const [isSent, setIsSent] = useState(false);
+  const [verifyError, setVerifyError] = useState("");
 
   //* UserDataStates *//
   const [AgredToTerms, SetAgredToTerms] = useState(false);
 
   //* Popover logic *//
-  const closeMenu = () => {
-    menuRef.current?.hidePopover();
-    backdropRef.current?.classList.remove("barrier");
-  };
   const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!menuRef.current) return;
@@ -100,71 +71,6 @@ function Popover({ open, backdropRef }: PopoverProps) {
       menuRef.current.hidePopover();
     }
   }, [open, option]);
-
-  async function SetUpUser({
-    uid,
-    username,
-    email,
-  }: {
-    uid: string;
-    username: string;
-    email: string;
-  }): Promise<boolean> {
-    const userRef = doc(db, "User", uid);
-    const userDoc = await getDoc(userRef);
-    if (userDoc.exists()) return true;
-
-    if (await isUsernameTaken(username)) {
-      SetCreateAccError("Username is taken");
-      return false;
-    }
-
-    await setDoc(userRef, {
-      displayName: username,
-      username: username.toLowerCase(),
-      email: email,
-      createdAt: new Date(),
-    });
-    await setDoc(doc(db, "publicUserInfo", uid), {
-      displayName: username,
-      username: username.toLowerCase(),
-      email: email,
-    });
-    return true;
-  }
-
-  async function isUsernameTaken(username: string) {
-    const q = query(
-      collection(db, "publicUserInfo"),
-      where("username", "==", username.toLowerCase()),
-    );
-    const snap = await getDocs(q);
-    return !snap.empty;
-  }
-
-  const ResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isEmail(resetEmail)) {
-      SetResetError("Enter your email first to reset your password.");
-      SetSent(false);
-      return;
-    } else {
-      try {
-        await sendPasswordResetEmail(auth, resetEmail);
-        SetResetError("Password reset email sent, check your inbox.");
-        SetSent(true);
-      } catch (error) {
-        const InsuError = error as { code?: string };
-        if (InsuError.code === "auth/user-not-found") {
-          SetResetError("User doesn't exist.");
-        } else if (InsuError.code === "auth/too-many-requests") {
-          SetResetError("Too many attempts.");
-        } else {
-          SetResetError("Something went wrong, try again.");
-        }
-      }
-    }
-  };
 
   //* Poster logic
   const posters = Object.values(
@@ -177,134 +83,8 @@ function Popover({ open, backdropRef }: PopoverProps) {
   const [randomPoster] = useState(
     posters[Math.floor(Math.random() * posters.length)],
   );
-  useEffect(() => {
-    if (option == "verify") {
-      sendVerification();
-    }
-  }, [option]);
-  useEffect(() => {
-    if (option !== "verify") return;
-    const check = async () => {
-      if (!auth.currentUser) return;
-      await auth.currentUser.reload();
-      if (auth.currentUser.emailVerified) {
-        closeMenu();
-      }
-    };
-    const id = setInterval(check, 3000);
-    return () => clearInterval(id);
-  }, [option]);
 
   //* AccountLog Logic *//
-  const SingWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      const username = user.displayName
-        ? user.displayName.toLowerCase().replace(/[^a-z0-9_]/g, "_")
-        : user.email!.split("@")[0];
-      const ok = await SetUpUser({
-        uid: user.uid,
-        username: username,
-        email: user.email!,
-      });
-      if (!ok) return;
-      closeMenu();
-    } catch (error) {
-      const err = error as { code: string; message: string };
-      console.error(err.message);
-      if (err.code === "auth/popup-closed-by-user") {
-        SetLoginError("Sign-in cancelled.");
-      } else if (err.code === "auth/popup-blocked") {
-        SetLoginError("Allow pop-ups for this site, then try again.");
-      } else if (err.code === "auth/unauthorized-domain") {
-        SetLoginError("Something went wrong, try again.");
-      } else {
-        SetLoginError("Something went wrong, try again.");
-      }
-    }
-  };
-  const signUp = async (data: z.infer<typeof signUpSchema>) => {
-    if (await isUsernameTaken(data.username)) {
-      SetCreateAccError("Username is taken");
-      return;
-    }
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password,
-      );
-      setSignedUpEmail(data.email);
-      try {
-        const ok = await SetUpUser({
-          uid: userCredential.user.uid,
-          username: data.username,
-          email: data.email,
-        });
-        if (!ok) return;
-        setOption("verify");
-      } catch (firebaseError) {
-        console.error(firebaseError);
-        SetCreateAccError("Couldn't save your profile, try again.");
-      }
-    } catch (firebaseError) {
-      const error = firebaseError as { message: string; code?: string };
-      console.error(`Error creating account: ${error.message}`);
-      if (error.code === "auth/email-already-in-use") {
-        SetCreateAccError("Email in use.");
-      } else if (error.code === "auth/operation-not-allowed") {
-        SetCreateAccError("Operation rejected.");
-      } else if (error.code === "auth/network-request-failed") {
-        SetCreateAccError("Database can't be reached.");
-      } else {
-        SetCreateAccError("Something went wrong, try again later.");
-      }
-    }
-  };
-  const Login = async (data: z.infer<typeof LoginInSchema>) => {
-    if (isEmail(data.both)) {
-      try {
-        await signInWithEmailAndPassword(auth, data.both, data.password);
-        closeMenu();
-      } catch (firebaseError) {
-        const error = firebaseError as { message: string; code?: string };
-        console.error(`Error logging in: ${error.message}`);
-        if (error.code === "auth/user-not-found") {
-          SetLoginError("User doesn't exist.");
-        } else if (error.code === "auth/invalid-credential") {
-          SetLoginError("Wrong email or password or User doesn't exist.");
-        } else if (error.code === "auth/too-many-requests") {
-          SetLoginError("Too many attempts.");
-        } else {
-          SetLoginError("Something went wrong, try again.");
-        }
-      }
-    } else {
-      try {
-        const email = await getEmailFromUsername({
-          username: data.both.toLowerCase(),
-        });
-        if (!email) {
-          SetLoginError("User doesn't exist.");
-          return;
-        }
-        await signInWithEmailAndPassword(auth, email, data.password);
-        closeMenu();
-      } catch (firebaseError) {
-        const error = firebaseError as { message: string; code?: string };
-        console.error(`Error logging in: ${error.message}`);
-        if (error.code === "auth/invalid-credential") {
-          SetLoginError("Wrong email or password or User doesn't exist.");
-        } else if (error.code === "auth/too-many-requests") {
-          SetLoginError("Too many attempts.");
-        } else {
-          SetLoginError("Something went wrong, try again.");
-        }
-      }
-    }
-  };
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -313,7 +93,10 @@ function Popover({ open, backdropRef }: PopoverProps) {
       document.body.style.overflow = "";
     };
   }, [open]);
-
+  const CloseMenu = () => {
+    menuRef.current?.hidePopover();
+    onClose();
+  };
   const LoginInSchema = z.object({
     both: z.union([
       z
@@ -374,7 +157,87 @@ function Popover({ open, backdropRef }: PopoverProps) {
       : SignInForm.formState.errors.password
         ? "password"
         : null;
-  const isEmail = (value: string) => z.email().safeParse(value).success;
+
+  const HandleLogin = async (data: z.infer<typeof LoginInSchema>) => {
+    try {
+      let email = data.both;
+      if (!data.both.includes("@")) {
+        const found = await getEmailFromUsername({
+          username: data.both.toLowerCase(),
+        });
+        if (!found) {
+          setLoginError("User doesn't exist");
+          return;
+        }
+        email = found;
+      }
+      CloseMenu();
+      await classicLogin({ password: data.password, email: email });
+    } catch (error) {
+      setLoginError(getPlainError(error));
+    }
+  };
+  const HandleSignUp = async (data: z.infer<typeof signUpSchema>) => {
+    try {
+      if (await isUsernameTaken(data.username)) {
+        setCreateAccError("Username is already taken.");
+        return;
+      } else {
+        await classicSignUp({
+          password: data.password,
+          email: data.email,
+          username: data.username,
+        });
+        setOption("verify");
+        try {
+          sendVerification();
+        } catch (error) {
+          console.error("Error sending verification email:", error);
+          setVerifyError(
+            "Failed to send verification email. Please try again later.",
+          );
+        }
+      }
+    } catch (error) {
+      setCreateAccError(getPlainError(error));
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (option !== "verify") return;
+
+    sendVerification(); // sends the email when the screen opens
+
+    const timer = setInterval(async () => {
+      await auth.currentUser?.reload();
+      if (auth.currentUser?.emailVerified) {
+        clearInterval(timer);
+        CloseMenu();
+        setOption("login");
+      }
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [option]);
+
+  const ResetPassword = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      sendPasswordResetEmail(auth, resetEmail);
+      setIsSent(true);
+    } catch (error) {
+      setIsSent(false);
+      setResetError(getPlainError(error));
+    }
+  };
+  const SignInWithGoogle = async () => {
+    const ok = await LoginWithGoogle();
+    if (ok == "true") {
+      setLoginError(ok);
+    } else {
+      CloseMenu();
+    }
+  };
 
   // element *//
   return (
@@ -425,8 +288,8 @@ function Popover({ open, backdropRef }: PopoverProps) {
               </span>
               <form
                 id="form-rhf-input"
-                onSubmit={LoginForm.handleSubmit(Login)}
                 className="LoginForm"
+                onSubmit={LoginForm.handleSubmit(HandleLogin)}
               >
                 <span
                   className="LoginForm"
@@ -533,9 +396,9 @@ function Popover({ open, backdropRef }: PopoverProps) {
                       </Button>
                       <Button
                         className="SignInButton"
-                        onClick={SingWithGoogle}
                         style={{ fontFamily: "Alexandria" }}
                         type="button"
+                        onClick={() => SignInWithGoogle()}
                       >
                         <i className="fa-brands fa-google" />
                         Sign In With Google
@@ -564,6 +427,13 @@ function Popover({ open, backdropRef }: PopoverProps) {
           <div className="LoginPopOverContainer">
             <div className="verifyContainer">
               <div className="verifyContainerInner">
+                <Button
+                  className="resendBtn sendBtn resendBtnBack"
+                  type="button"
+                  onClick={() => setOption("login")}
+                >
+                  <IoIosArrowBack />
+                </Button>
                 <span>
                   <div className="verify-icon">
                     <MdOutlineEmail />
@@ -573,16 +443,12 @@ function Popover({ open, backdropRef }: PopoverProps) {
                     <p>We send a verification email to </p>
                     <span className="email">{signedUpEmail}</span>
                   </span>
-                  <Button
-                    className="resendBtn"
-                    onClick={() => sendVerification()}
-                  >
-                    Resend
-                  </Button>
+                  <Button className="resendBtn">Resend</Button>
                 </span>
                 <p>
                   Check your spam folder if you don't see it in a few minutes
                 </p>
+                {verifyError && <p style={{ color: "white" }}>{verifyError}</p>}
               </div>
             </div>
           </div>
@@ -610,7 +476,7 @@ function Popover({ open, backdropRef }: PopoverProps) {
                   <span>
                     <p>Enter email and we'll send a Reset email</p>
                   </span>
-                  <form onSubmit={ResetPassword}>
+                  <form onSubmit={(e) => ResetPassword(e)}>
                     <InputGroup className="max-w-xs ResetInputPill InputPill">
                       <InputGroupInput
                         placeholder="Email"
@@ -700,8 +566,8 @@ function Popover({ open, backdropRef }: PopoverProps) {
               </span>
               <form
                 id="form-rhf-input"
-                onSubmit={SignInForm.handleSubmit(signUp)}
                 className="LoginForm"
+                onSubmit={SignInForm.handleSubmit(HandleSignUp)}
               >
                 <span
                   className="LoginForm"

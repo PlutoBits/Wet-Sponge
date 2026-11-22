@@ -21,7 +21,7 @@ function AccountSettingsBox({
       ref={(el) => {
         TabRef.current[index] = el;
       }}
-      onClick={() => onClick}
+      onClick={onClick}
     >
       {ConentIcon}
       <p>{Conent}</p>

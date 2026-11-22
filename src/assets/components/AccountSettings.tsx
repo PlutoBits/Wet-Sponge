@@ -8,7 +8,7 @@ import { TbListDetails } from "react-icons/tb";
 import { VscDebugConnected } from "react-icons/vsc";
 import { GoShieldCheck } from "react-icons/go";
 
-function AccountSettings({ open }: { open: boolean }) {
+function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
   const { UserData } = useUser();
   const menuRef = useRef<HTMLDivElement>(null);
   const [Change, setChange] = useState("Profile");
@@ -35,7 +35,7 @@ function AccountSettings({ open }: { open: boolean }) {
     if (btn) {
       setIndicatorTop(btn.offsetTop);
     }
-  }, [activeIndex]);
+  }, [activeIndex, open]);
   return (
     <div
       className="AccountSettings"

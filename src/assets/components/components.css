@@ -1171,22 +1171,29 @@
   background-color: transparent;
   border-radius: 50%;
   font-size: 4rem;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  aspect-ratio: 1;
 }
 .AccountSettingsProfileCardInfo {
   display: flex;
-  flex: 1;
   justify-content: center;
   flex-direction: column;
   padding: 5px;
+  width: calc(100% - 60px);
 }
 .AccountSettingsProfileCardInfo > .z {
-  width: max-content;
   font-size: 1.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .AccountSettingsProfileCardInfoFollow {
   color: var(--text-muted);
   font-size: 0.8rem;
-  width: max-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .Line {
   width: cal(100% - 10px);
