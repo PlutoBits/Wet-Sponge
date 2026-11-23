@@ -16,19 +16,7 @@ function Animation() {
         </div>
       </div>
       <div className="AnimationContainer">
-        {Animation ? (
-          Animation.map((Data, key) => (
-            <AnimationCard
-              key={key}
-              Image={Data.image}
-              title={Data.title}
-              Views={Data.views}
-              likes={Data.likes}
-              timeStamp={Data.timeStamp}
-              index={key}
-            />
-          ))
-        ) : isLoading ? (
+        {isLoading ? (
           <Face
             type="happy"
             text="Loading"
@@ -38,6 +26,19 @@ function Animation() {
           />
         ) : error ? (
           <Face type="sad" text="can't find data" width={260} heigth={480} />
+        ) : Animation ? (
+          Animation.map((Data, key) => (
+            <AnimationCard
+              key={key}
+              Image={Data.image}
+              title={Data.title}
+              Views={Data.views}
+              likes={Data.likes}
+              timeStamp={Data.timeStamp}
+              Motion={true}
+              index={key}
+            />
+          ))
         ) : (
           <Face type="sad" text="ahhhh" width={260} heigth={480} />
         )}

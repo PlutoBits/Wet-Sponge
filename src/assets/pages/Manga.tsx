@@ -16,7 +16,17 @@ function Manga() {
         </div>
       </div>
       <div className="Container">
-        {manga ? (
+        {isLoading ? (
+          <Face
+            type="happy"
+            text="Loading"
+            width={260}
+            heigth={480}
+            padding={80}
+          />
+        ) : error ? (
+          <Face type="sad" text="Data fetch failed" width={260} heigth={480} />
+        ) : manga ? (
           manga.map((Manga, key) => (
             <MangaCard
               key={key}
@@ -27,18 +37,9 @@ function Manga() {
               title={Manga.title}
               likes={Manga.likes}
               index={key}
+              Motion={true}
             ></MangaCard>
           ))
-        ) : isLoading ? (
-          <Face
-            type="happy"
-            text="Loading"
-            width={260}
-            heigth={480}
-            padding={80}
-          />
-        ) : error ? (
-          <Face type="sad" text="Data fetch failed" width={260} heigth={480} />
         ) : (
           <Face type="sad" text="ahhhh" width={260} heigth={480} />
         )}
@@ -46,5 +47,4 @@ function Manga() {
     </>
   );
 }
-
 export default Manga;

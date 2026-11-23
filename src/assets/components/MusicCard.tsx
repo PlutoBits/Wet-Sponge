@@ -4,11 +4,13 @@ type Props = {
   image?: string;
   title?: string;
   index?: number;
+  Motion?: boolean;
 };
 
-function MusicCard({ image, title, index = 0 }: Props) {
+function MusicCard({ image, title, index = 0, Motion }: Props) {
+  const Wrapper = Motion ? motion.div : "div";
   return (
-    <motion.div
+    <Wrapper
       className={`MusicCard`}
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -24,7 +26,7 @@ function MusicCard({ image, title, index = 0 }: Props) {
       <div className="MusicCardbottom">
         <h1 className="MusicCardtitle">{title}</h1>
       </div>
-    </motion.div>
+    </Wrapper>
   );
 }
 

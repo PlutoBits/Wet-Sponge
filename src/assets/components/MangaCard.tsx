@@ -19,6 +19,7 @@ type props = {
   likes?: number;
   className?: string;
   index?: number;
+  Motion?: boolean;
 };
 
 function formatNumber(num?: number) {
@@ -41,13 +42,15 @@ function MangaCard({
   likes,
   className,
   index = 0,
+  Motion,
 }: props) {
   const [imageError, setImageError] = useState(false);
   const [LikeStatus, setLike] = useState(false);
   const [commentStatus, setcomment] = useState(false);
   const [saveStatus, setSave] = useState(false);
+  const Wrapper = Motion ? motion.div : "div";
   return (
-    <motion.div
+    <Wrapper
       className={`MangaCard ${className}`}
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -151,7 +154,7 @@ function MangaCard({
           </span>
         </div>
       </div>
-    </motion.div>
+    </Wrapper>
   );
 }
 

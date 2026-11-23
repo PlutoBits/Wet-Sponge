@@ -127,6 +127,24 @@ body {
   height: 600px;
   overflow: hidden;
 }
+.ShowColumn {
+  padding: 30px 7vw 20px;
+  overflow-x: auto;
+  display: flex;
+  scrollbar-width: none;
+  gap: 20px;
+}
+.ShowTitleRow {
+  background-color: transparent;
+  padding: 0 7vw;
+  display: flex;
+  justify-content: space-between;
+}
+.ShowTitle {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1.5rem;
+}
 .hero-page::before {
   content: "";
   position: absolute;

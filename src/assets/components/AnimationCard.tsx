@@ -7,7 +7,7 @@ import { MdOutlineQueue } from "react-icons/md";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { RiShareForwardLine } from "react-icons/ri";
-import { useRef } from "react"
+import { useRef } from "react";
 import { toast } from "react-toastify";
 
 type Props = {
@@ -18,6 +18,7 @@ type Props = {
   comments?: number;
   timeStamp?: string;
   index?: number;
+  Motion?: boolean;
 };
 
 function formatNumber(num?: number) {
@@ -38,17 +39,19 @@ function AnimationCard({
   likes,
   timeStamp,
   index = 0,
+  Motion,
 }: Props) {
   const menuRef = useRef<HTMLDivElement>(null);
   const closeMenu = () => {
     menuRef.current?.hidePopover();
   };
   const inWork = () => {
-    toast.info("Under Work")
-  }
+    toast.info("Under Work");
+  };
+  const Wrapper = Motion ? motion.div : "div";
   return (
     <>
-      <motion.div
+      <Wrapper
         className={"AnimationCard"}
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -81,8 +84,8 @@ function AnimationCard({
                 </div>
               </span>
               <div className="AnimationCardDetails3">
-                <Button 
-                  popoverTarget={`${index}AnimationMenu`} 
+                <Button
+                  popoverTarget={`${index}AnimationMenu`}
                   className="AnimationMenuButton"
                   style={{ anchorName: `--animation-menu-${index}` }}
                 >
@@ -92,20 +95,48 @@ function AnimationCard({
             </span>
           </div>
         </div>
-      </motion.div>
+      </Wrapper>
       <div
         popover="auto"
         className="AnimationMenu"
         id={`${index}AnimationMenu`}
         style={{ positionAnchor: `--animation-menu-${index}` }}
         ref={menuRef}
-        >
-          <ul className="AnimationMenuList">
-            <button onClick={() => {closeMenu(), inWork()}}><MdOutlineQueue /><p>Add to queue</p></button>
-            <button onClick={() => {closeMenu(), inWork()}}><MdOutlineWatchLater /><p>Save to watch later</p></button>
-            <button onClick={() => {closeMenu(), inWork()}}><IoBookmarkOutline /><p>Save to playlist</p></button>
-            <button onClick={() => {closeMenu(), inWork()}}><RiShareForwardLine /><p>Share</p></button>
-          </ul>
+      >
+        <ul className="AnimationMenuList">
+          <button
+            onClick={() => {
+              (closeMenu(), inWork());
+            }}
+          >
+            <MdOutlineQueue />
+            <p>Add to queue</p>
+          </button>
+          <button
+            onClick={() => {
+              (closeMenu(), inWork());
+            }}
+          >
+            <MdOutlineWatchLater />
+            <p>Save to watch later</p>
+          </button>
+          <button
+            onClick={() => {
+              (closeMenu(), inWork());
+            }}
+          >
+            <IoBookmarkOutline />
+            <p>Save to playlist</p>
+          </button>
+          <button
+            onClick={() => {
+              (closeMenu(), inWork());
+            }}
+          >
+            <RiShareForwardLine />
+            <p>Share</p>
+          </button>
+        </ul>
       </div>
     </>
   );

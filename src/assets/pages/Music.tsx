@@ -16,16 +16,7 @@ function Music() {
         </div>
       </div>
       <div className="Container">
-        {Music ? (
-          Music.map((Data, key) => (
-            <MusicCard
-              title={Data.title}
-              image={Data.image}
-              index={key}
-              key={key}
-            ></MusicCard>
-          ))
-        ) : isLoading ? (
+        {isLoading ? (
           <Face
             type="happy"
             text="Loading"
@@ -35,6 +26,16 @@ function Music() {
           />
         ) : error ? (
           <Face type="sad" text="Data fetch failed" width={260} heigth={480} />
+        ) : Music ? (
+          Music.map((Data, key) => (
+            <MusicCard
+              title={Data.title}
+              image={Data.image}
+              index={key}
+              Motion={true}
+              key={key}
+            ></MusicCard>
+          ))
         ) : (
           <Face type="sad" text="ahhhh" width={260} heigth={480} />
         )}
