@@ -12,12 +12,13 @@ import { auth, db } from "./FirebaseConfig";
 import { useQuery } from "@tanstack/react-query";
 import type { UserData } from "../assets/types/Types";
 import {
-  updateEmail,
+  verifyBeforeUpdateEmail,
   sendEmailVerification,
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 export type MangaItems = {
@@ -137,14 +138,20 @@ export const UpdateDisplayName = (displayName: string, uid: string) => {
     setDoc(doc(db, "User", uid), { displayName: displayName }, { merge: true }),
   ]);
 };
-export const UpdateEmail = async (email: string, uid: string) => {
+export const UpdateEmail = async (email: string) => {
   const user = auth.currentUser;
   if (!user) return;
-  (await updateEmail(user, email),
-    await Promise.all([
-      setDoc(doc(db, "publicUserInfo", uid), { email: email }, { merge: true }),
-      setDoc(doc(db, "User", uid), { email: email }, { merge: true }),
-    ]));
+  try {
+    await verifyBeforeUpdateEmail(user, email);
+    await setDoc(doc(db, "User", user.uid), { email: email }, { merge: true });
+    await setDoc(
+      doc(db, "publicUserInfo", user.uid),
+      { email: email },
+      { merge: true },
+    );
+  } catch (error) {
+    console.error("error Updating email: ", error);
+  }
 };
 
 export const getEmailFromUsername = async ({
@@ -168,6 +175,10 @@ export const sendVerification = async () => {
   if (auth.currentUser) {
     await sendEmailVerification(auth.currentUser);
   }
+};
+
+export const LogOut = async () => {
+  await signOut(auth);
 };
 
 export async function SetUpUser({

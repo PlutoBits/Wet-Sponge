@@ -6,9 +6,10 @@ import AccountDataCard from "../components/AccountDataCard";
 import AccountSettings from "../../assets/components/AccountSettings";
 import ProfileCard from "../components/ProfileCard";
 import { useUser } from "../components/AccountContext";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../Config/FirebaseConfig";
 import { IoSettingsOutline } from "react-icons/io5";
+import { LogOut } from "../../Config/Functions";
 
 function Account() {
   const [PopoverOpener, SetPopoverOpener] = useState(false);
@@ -26,9 +27,6 @@ function Account() {
       return cell;
     });
   }, []);
-  const LogOut = async () => {
-    await signOut(auth);
-  };
   return (
     <>
       <div className="intro" style={{ paddingBottom: `25px` }}>

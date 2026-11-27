@@ -1221,9 +1221,15 @@
   height: auto;
 }
 .ChangerContainer h1 {
-  font-size: 1.2rem;
-  margin: 5px 5px;
+  font-size: 1.4rem;
+  margin: 5px 5px 2px;
   text-align: center;
+}
+.ChangerContainer > p {
+  font-size: 0.8rem;
+  margin: 0 5px 10px;
+  text-align: center;
+  color: var(--text-muted)
 }
 .ChangerContainer input {
   background-color: var(--surface);

@@ -7,7 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { FaShieldDog } from "react-icons/fa6";
 import { FaShieldCat } from "react-icons/fa6";
 import { Timestamp } from "firebase/firestore/lite";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from "../../Config/FirebaseConfig";
 
 const Pet = Math.random() < 0.5 ? "Dowg" : "Cat";
@@ -49,6 +49,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
             Followers: data?.Followers ?? 0,
             Followings: data?.Followings ?? 0,
           });
+          if (user.email && user.email !== data?.email) {
+            setDoc(
+              doc(db, "publicUserInfo", user.uid),
+              { email: user.email },
+              { merge: true },
+            );
+            setDoc(
+              doc(db, "User", user.uid),
+              { email: user.email },
+              { merge: true },
+            );
+          }
         },
       );
       return () => unsubSnap();

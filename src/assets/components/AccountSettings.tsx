@@ -16,13 +16,31 @@ import {
   UpdateDisplayName,
   UpdateEmail,
   isUsernameTaken,
+  getPlainError,
+  LogOut,
 } from "../../Config/Functions";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { auth } from "../../Config/FirebaseConfig";
+import { toast } from "react-toastify";
 
-function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
-  const { UserData, SetUserData } = useUser();
+function AccountSettings({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose?: () => void;
+}) {
+  const wasSignedIn = useRef(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const TabRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const { UserData, SetUserData } = useUser();
   const [Change, setChange] = useState("Profile");
+  const [indicatorTop, setIndicatorTop] = useState(0);
+  const [SiderType, setSiderType] = useState("none");
   const tabs = [
     { name: "Profile", icon: <FaRegUser /> },
     { name: "Detail", icon: <TbListDetails /> },
@@ -30,9 +48,6 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
     { name: "Security", icon: <GoShieldCheck /> },
   ];
   const activeIndex = tabs.findIndex((tab) => tab.name === Change);
-  const TabRef = useRef<(HTMLButtonElement | null)[]>([]);
-  const [indicatorTop, setIndicatorTop] = useState(0);
-  const [SiderType, setSiderType] = useState("none");
   const ProfileOptions = [
     {
       name: "Username",
@@ -51,9 +66,11 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
     },
   ];
 
-  useEffect(() => {
-    console.log(SiderType);
-  }, [SiderType]);
+  const CloseMenu = () => {
+    onClose?.();
+    menuRef.current?.hidePopover();
+  };
+
   /* popover effect */
   useEffect(() => {
     if (!menuRef.current) return;
@@ -78,7 +95,7 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
       .min(3, "Username must be at least 3 characters.")
       .max(20, "Username must be at most 20 characters.")
       .regex(
-        /^[a-z0-9_]+$/,
+        /^[a-zA-Z0-9_]+$/,
         "Username can only contain Small letters, numbers, and underscores.",
       ),
   });
@@ -102,26 +119,52 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
   });
   const EmailSchema = z.object({
     Email: z.email(),
+    Password: z.string().min(1, "Enter your current password."),
   });
   const EmailForm = useForm<z.infer<typeof EmailSchema>>({
     resolver: zodResolver(EmailSchema),
-    defaultValues: { Email: "" },
+    defaultValues: { Email: "", Password: "" },
   });
 
-  const handleSaveEmail = async (data: { Email: string }) => {
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        wasSignedIn.current = true;
+      } else if (wasSignedIn.current) {
+        toast.info("You've been signed out. Sign in again.");
+      }
+    });
+    return unsub;
+  }, []);
+
+  const handleSaveEmail = async (data: { Email: string; Password: string }) => {
     const user = auth.currentUser;
-    if (!user) return;
-    await UpdateEmail(data.Email, user.uid);
-    SetUserData((prev) => ({ ...prev, email: data.Email }));
-    setSiderType("none");
+    if (!user || !user.email) return;
+    try {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        data.Password,
+      );
+      await reauthenticateWithCredential(user, credential);
+      await UpdateEmail(data.Email);
+      EmailForm.setError("Email", {
+        message: "check your new email to verify",
+      });
+    } catch (error) {
+      EmailForm.setError("Email", { message: getPlainError(error) });
+      return;
+    }
   };
   const handleSaveUsername = async (data: { Username: string }) => {
     const user = auth.currentUser;
     if (!user) return;
-    const usernam = data.Username.toLowerCase();
-    if (await isUsernameTaken(usernam)) return;
-    await UpdateUsername(usernam, user.uid);
-    SetUserData((prev) => ({ ...prev, username: usernam }));
+    const name = data.Username.toLowerCase();
+    if (await isUsernameTaken(name)) {
+      UsernameForm.setError("Username", { message: "Username is taken" });
+      return;
+    }
+    await UpdateUsername(name, user.uid);
+    SetUserData((prev) => ({ ...prev, username: name }));
     setSiderType("none");
   };
   const handleSaveDisplayName = async (data: { DisplayName: string }) => {
@@ -212,6 +255,15 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
                               ? "Change Email"
                               : "UnknowProperties"}
                       </h1>
+                      <p>
+                        {SiderType === "username"
+                          ? "Enter Your New Username"
+                          : SiderType === "displayname"
+                            ? "Change Your New DisplayName"
+                            : SiderType === "email"
+                              ? "You will be logged out from every device after Updating email"
+                              : "UnknowProperties"}
+                      </p>
                       {SiderType === "username" && (
                         <form
                           onSubmit={UsernameForm.handleSubmit(
@@ -228,6 +280,11 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
                               />
                             )}
                           />
+                          {UsernameForm.formState.errors.Username && (
+                            <p>
+                              {UsernameForm.formState.errors.Username.message}
+                            </p>
+                          )}
                           <button type="submit">Save</button>
                         </form>
                       )}
@@ -247,6 +304,14 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
                               />
                             )}
                           />
+                          {DisplayNameForm.formState.errors.DisplayName && (
+                            <p>
+                              {
+                                DisplayNameForm.formState.errors.DisplayName
+                                  .message
+                              }
+                            </p>
+                          )}
                           <button type="submit">Save</button>
                         </form>
                       )}
@@ -258,9 +323,34 @@ function AccountSettings({ open }: { open: boolean; onClose?: () => void }) {
                             name="Email"
                             control={EmailForm.control}
                             render={({ field }) => (
-                              <input {...field} placeholder={UserData.email} />
+                              <>
+                                <p>New Email</p>
+                                <input
+                                  {...field}
+                                  placeholder={UserData.email}
+                                />
+                              </>
                             )}
                           />
+                          <Controller
+                            name="Password"
+                            control={EmailForm.control}
+                            render={({ field }) => (
+                              <>
+                                <p>Current Password</p>
+                                <input
+                                  {...field}
+                                  placeholder={"password"}
+                                  autoComplete="new-password"
+                                  type="password"
+                                />
+                              </>
+                            )}
+                          />
+
+                          {EmailForm.formState.errors.Email && (
+                            <p>{EmailForm.formState.errors.Email.message}</p>
+                          )}
                           <button type="submit">Save</button>
                         </form>
                       )}
