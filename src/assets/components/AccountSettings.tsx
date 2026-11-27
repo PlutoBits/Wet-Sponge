@@ -17,7 +17,6 @@ import {
   UpdateEmail,
   isUsernameTaken,
   getPlainError,
-  LogOut,
 } from "../../Config/Functions";
 import {
   EmailAuthProvider,
@@ -131,6 +130,7 @@ function AccountSettings({
       if (user) {
         wasSignedIn.current = true;
       } else if (wasSignedIn.current) {
+        CloseMenu();
         toast.info("You've been signed out. Sign in again.");
       }
     });
