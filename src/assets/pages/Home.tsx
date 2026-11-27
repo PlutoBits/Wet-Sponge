@@ -142,7 +142,6 @@ function Home() {
                   title={Data.title}
                   image={Data.image}
                   index={key}
-                  Motion={true}
                   key={key}
                 ></MusicCard>
               ))

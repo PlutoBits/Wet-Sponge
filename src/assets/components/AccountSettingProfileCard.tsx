@@ -27,7 +27,7 @@ function ProfileCard({
           </button>
         )}
       </div>
-      <div className={`AccountSettingsProfileCardInfo ${className}`}>
+      <div className={`AccountSettingsProfileCardInfo ${className} g`}>
         <p className="z c">{AccountData.username}</p>
         <p className="AccountSettingsProfileCardInfoFollow cc">
           {pen ? (
