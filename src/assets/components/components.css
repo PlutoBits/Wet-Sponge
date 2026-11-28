@@ -1281,10 +1281,11 @@
   width: calc(100% - 60px);
 }
 .AccountSettingsProfileCardInfo > .z {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 20px;
 }
 .AccountSettingsProfileCardInfoFollow {
   color: var(--text-muted);

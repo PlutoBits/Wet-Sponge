@@ -31,12 +31,13 @@ function Account() {
     <>
       <div className="intro" style={{ paddingBottom: `25px` }}>
         <div className="handing">ACCOUNT</div>
-        <div className="title" style={{ padding: `0px 0px 12px 0px` }}>
+        <div className="title" style={{ padding: `0px 0px 5px 0px` }}>
           {UserData.displayName}
         </div>
-        <div className="aboutwebsite" style={{ padding: `0px 0px 20px 0px` }}>
-          {UserData.Bio}
+        <div className="accUsername aboutwebsite" style={{ padding: 0 }}>
+          @{UserData.username}
         </div>
+        <div className="aboutwebsite">{UserData.Bio}</div>
         <div
           className="AboutContainer"
           style={{ paddingBottom: `1px`, margin: `10px 0` }}

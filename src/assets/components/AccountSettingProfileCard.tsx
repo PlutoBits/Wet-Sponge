@@ -28,7 +28,10 @@ function ProfileCard({
         )}
       </div>
       <div className={`AccountSettingsProfileCardInfo ${className} g`}>
-        <p className="z c">{AccountData.username}</p>
+        <p className="z c">{AccountData.display}</p>
+        <p className="AccountSettingsProfileCardInfoFollow c">
+          @{AccountData.username}
+        </p>
         <p className="AccountSettingsProfileCardInfoFollow cc">
           {pen ? (
             inEdit ? (
@@ -53,27 +56,31 @@ function ProfileCard({
               </>
             ) : (
               <>
-                {AccountData.Bio}
                 {pen && (
+                  <>
+                    {AccountData.Bio}
+                    <button
+                      className="PenButtonBio"
+                      onClick={() => SetEdit(!inEdit)}
+                    >
+                      {inEdit ? <FaSave /> : <FaPen />}
+                    </button>
+                  </>
+                )}
+              </>
+            )
+          ) : (
+            <>
+              {pen && (
+                <>
+                  {AccountData.Bio}
                   <button
                     className="PenButtonBio"
                     onClick={() => SetEdit(!inEdit)}
                   >
                     {inEdit ? <FaSave /> : <FaPen />}
                   </button>
-                )}
-              </>
-            )
-          ) : (
-            <>
-              {AccountData.Bio}
-              {pen && (
-                <button
-                  className="PenButtonBio"
-                  onClick={() => SetEdit(!inEdit)}
-                >
-                  {inEdit ? <FaSave /> : <FaPen />}
-                </button>
+                </>
               )}
             </>
           )}
